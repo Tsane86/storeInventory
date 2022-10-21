@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///store.db', echo=True)
+engine = create_engine('sqlite:///inventory.db', echo=True)
 Session = sessionmaker(bind=engine)  # create a session
 session = Session()  # create a session instance
 Base = declarative_base()  # create a base class
