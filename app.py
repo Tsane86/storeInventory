@@ -91,10 +91,10 @@ def show_menu():
     print('\nWelcome to the Store Inventory App')
     print('\rPlease select one of the following options:')
     print('\rV: Display an item by its Id')
-    print('\rA: Add an item')
-    print('\rS: Show all items')
+    print('\rA: Add an item to the inventory')
+    print('\rS: Show all items from the inventory')
     print('\rB: Backup all items to a csv')
-    print('\rQ: Quit the program')
+    print('\rQ: Quit the App')
 
     while True:
         user_input = input('\rPlease select an option: ').upper()
@@ -117,5 +117,5 @@ def show_menu():
             backup_items()
         elif user_input == 'Q':
             print('\rExiting...')
-            time.sleep(1)
+            time.sleep(1.5)
             exit()
