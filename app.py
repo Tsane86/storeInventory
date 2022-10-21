@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///users.db', echo=True)
+engine = create_engine('sqlite:///store.db', echo=True)
 Session = sessionmaker(bind=engine)  # create a session
 session = Session()  # create a session instance
 Base = declarative_base()  # create a base class
@@ -47,7 +47,7 @@ def add_csv():
         data = csv.reader(csvfile)
         for row in data:
             if session.query(Item).filter_by(name=row[0]).one_or_none() is None:
-                item = Item(name=row[0], price=convert_float_to_int(clean_price(
+                item = Item(name=row[0].replace('"', ''), price=convert_float_to_int(clean_price(
                     row[1])), quantity=row[2], date=clean_date(row[3]))
                 session.add(item)
         session.commit()
@@ -60,7 +60,7 @@ def add_item(name, price, quantity,  date):
         session.add(item)
     else:
         print('\rPlease enter valid data')
-        print('For example: Fruitloops, 5, 5, 2022-01-01')
+        print('For example: Fruitloops, 5, 8, 2022-01-01')
     session.commit()
 
 # get all items from database
@@ -103,11 +103,12 @@ def show_menu():
         else:
             print('\rPlease select a valid option')
         if user_input == 'V':
-            get_item_by_id(input('\rPlease enter the ID of the item: '))
+            get_item_by_id(input('\rPlease enter a valid ID of the item: '))
         elif user_input == 'A':
             print('\nPlease enter the details of the new item:')
+            print('\rFor example: Fruitloops, 5, 8, 2022-01-01')
             add_item(input('\rName: '),
-                    input('\rPrice: '),
+                    input('\rPrice: $'),
                     input('\rQuantity: '),
                     input('\rDate: '))
         elif user_input == 'S':
