@@ -53,11 +53,10 @@ def add_csv():
 # add Item to database
 def add_item(name, price, quantity, date):
     if session.query(Item).filter_by(name=name).one_or_none() is None:
-        new_item_name = name
-        new_item_price = convert_float_to_int(clean_price(price))
-        new_item_date = clean_date(date)
-        item = Item(name=new_item_name, price=new_item_price, quantity=quantity, date=new_item_date)
+        item = Item(name=name, price=convert_float_to_int(
+            clean_price(price)), quantity=quantity, date=clean_date(date))
         session.add(item)
+        print('\rNew item added!')
     else:
         print('\rPlease enter valid data')
         print('For example: Fruitloops, 5, 8, 01/01/2022 (MM-DD-YYYY)')
