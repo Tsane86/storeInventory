@@ -60,7 +60,7 @@ def add_item(name, price, quantity, date):
         session.add(item)
     else:
         print('\rPlease enter valid data')
-        print('For example: Fruitloops, 5, 8, 01/01/2022 (MM-DD-YYYY')
+        print('For example: Fruitloops, 5, 8, 01/01/2022 (MM-DD-YYYY)')
     session.commit()
 
 # get all items from database
