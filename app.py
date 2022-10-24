@@ -35,6 +35,7 @@ def clean_date(date_str):
 
 def clean_price(price_str):
     return float(price_str.replace('$', '').replace(',', ''))
+    #TODO product_price was stored as an Integer converted to cents (Ex. $3.19 becomes 319)
 
 def convert_float_to_int(num):
     return int(num)
@@ -58,8 +59,7 @@ def add_item(name, price, quantity, date):
         session.add(item)
         print('\rNew item added!')
     else:
-        print('\rPlease enter valid data')
-        print('For example: Fruitloops, 5, 8, 01/01/2022 (MM-DD-YYYY)')
+        print('\rProduct already exists in database')
     session.commit()
 
 # get all items from database
@@ -95,9 +95,9 @@ def show_menu():
 
     while True:
         print('\nPlease select from the following options:')
-        print('\rV: Display an item by its Id')
-        print('\rA: Add an item to the Store inventory')
-        print('\rB: Backup all iventory items to a csv')
+        print('\rV: View a single product\'s inventory')
+        print('\rA: Add a new product to the database')
+        print('\rB: Make a backup of the entire inventory (to csv)')
         print('\rQ: Quit the App')
 
         user_input = input('\rPlease select an option: ').upper()
