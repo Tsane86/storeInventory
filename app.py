@@ -88,12 +88,12 @@ def backup_items():
 
 #show menu
 def show_menu():
-    print('\nWelcome to the Store Inventory App')
-    print('\rPlease select one of the following options:')
+    print('\n******** Store Inventory App ********')
+    print('\rPlease select from the following options:')
     print('\rV: Display an item by its Id')
-    print('\rA: Add an item to the inventory')
-    print('\rS: Show all items from the inventory')
-    print('\rB: Backup all items to a csv')
+    print('\rA: Add an item to the Store inventory')
+    print('\rS: Show all items from the Store inventory')
+    print('\rB: Backup all iventory items to a csv')
     print('\rQ: Quit the App')
 
     while True:
