@@ -55,10 +55,15 @@ def add_csv():
 # add Item to database
 def add_item(name, price, quantity, date):
     if session.query(Item).filter_by(name=name).one_or_none() is None:
-        item = Item(name=name, price=
-            clean_price(price), quantity=quantity, date=clean_date(date))
-        session.add(item)
-        print('\rNew item added!')
+        try:
+            item = Item(name=name, price=
+                clean_price(price), quantity=quantity, date=clean_date(date))
+            session.add(item)
+            print('\rNew item added!')
+        except ValueError as err:
+            print('\rOh no! Something went wrong. Please try again.')
+            print('\rPlease check your data is in the right format')
+            print('\rFor example: Fruitloops, 5, 8.30, 01/01/2022 (MM-DD-YYYY)')
     else:
         print('\rProduct already exists in database')
     session.commit()
