@@ -34,11 +34,12 @@ def clean_date(date_str):
     return datetime.date(year, month, day)
 
 def clean_price(price_str):
-    return float(price_str.replace('$', '').replace(',', ''))
-    #TODO product_price was stored as an Integer converted to cents (Ex. $3.19 becomes 319)
+    return int(float(price_str.replace('$','')) * 100)
+    #this converts the price to an integer of cents as per the instructions
 
-def convert_float_to_int(num):
-    return int(num)
+def convert_int_to_float(price):
+    return float(price) / 100
+    #this returns the cents price as a float with two decimal places
 
 # add all items from csv file to database
 def add_csv():
@@ -46,16 +47,16 @@ def add_csv():
         data = csv.reader(csvfile)
         for row in data:
             if session.query(Item).filter_by(name=row[0]).one_or_none() is None:
-                item = Item(name=row[0], price=convert_float_to_int(clean_price(
-                    row[1])), quantity=row[2], date=clean_date(row[3]))
+                item = Item(name=row[0], price=clean_price(
+                    row[1]), quantity=row[2], date=clean_date(row[3]))
                 session.add(item)
         session.commit()
 
 # add Item to database
 def add_item(name, price, quantity, date):
     if session.query(Item).filter_by(name=name).one_or_none() is None:
-        item = Item(name=name, price=convert_float_to_int(
-            clean_price(price)), quantity=quantity, date=clean_date(date))
+        item = Item(name=name, price=
+            clean_price(price), quantity=quantity, date=clean_date(date))
         session.add(item)
         print('\rNew item added!')
     else:
@@ -64,8 +65,7 @@ def add_item(name, price, quantity, date):
 
 # get all items from database
 def get_all_items():
-    items = session.query(Item).all()
-    return items
+    return session.query(Item).all()
 
 # get item from database by ID
 def get_item_by_id(id):
@@ -76,7 +76,7 @@ def get_item_by_id(id):
         item = session.query(Item).filter_by(id=id).one()
         print('\rID: ' + str(item.id))
         print('\rName: ' + item.name)
-        print('\rPrice: $' + str(item.price))
+        print('\rPrice: $' + str(convert_int_to_float(item.price)))
         print('\rQuantity: ' + str(item.quantity))
         print('\rDate: ' + str(item.date))
     else:
@@ -87,7 +87,7 @@ def backup_items():
     with open('backup.csv', 'w') as csvfile:
         data = csv.writer(csvfile)
         for item in get_all_items():
-            data.writerow([item.name, item.price, item.quantity, item.date])
+            data.writerow([item.name, convert_int_to_float(item.price), item.quantity, item.date])
 
 #show menu
 def show_menu():
@@ -106,7 +106,7 @@ def show_menu():
                 get_item_by_id(input('\rPlease enter a valid ID of the item: '))
             elif user_input == 'A':
                 print('\nPlease enter the details of the new item:')
-                print('\rFor example: Fruitloops, 5, 8, 01/01/2022 (MM-DD-YYYY)')
+                print('\rFor example: Fruitloops, 5, 8.30, 01/01/2022 (MM-DD-YYYY)')
                 add_item(input('\rName: '),
                     input('\rPrice: $'),
                     input('\rQuantity: '),
