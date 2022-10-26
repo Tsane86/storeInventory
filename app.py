@@ -2,7 +2,7 @@ import datetime
 import csv
 import time
 
-from sqlalchemy import create_engine, Column, Integer, String, Date
+from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -18,7 +18,7 @@ class Item(Base):  # Table name: item
     id = Column(Integer, primary_key=True)  # primary key is id
     name = Column(String)
     price = Column(Integer)  # must be int
-    date = Column(Date) 
+    date = Column(DateTime)  # default is current date
     quantity= Column(Integer)
 
     def __repr__(self):  # return string representation of object
@@ -31,7 +31,8 @@ def clean_date(date_str):
     month = int(date_str[0])
     day = int(date_str[1])
     year =  int(date_str[2])
-    return datetime.date(year, month, day)
+    #return a datetime object
+    return datetime.datetime(year, month, day, 0, 0, 0, 0)
 
 def clean_price(price_str):
     return int(float(price_str.replace('$','')) * 100)
@@ -53,17 +54,17 @@ def add_csv():
         session.commit()
 
 # add Item to database
-def add_item(name, price, quantity, date):
+def add_item(name, price, quantity):
     if session.query(Item).filter_by(name=name).one_or_none() is None:
         try:
             item = Item(name=name, price=
-                clean_price(price), quantity=quantity, date=clean_date(date))
+                clean_price(price), quantity=quantity, date=datetime.datetime.now())
             session.add(item)
             print('\rNew item added!')
         except ValueError as err:
             print('\rOh no! Something went wrong. Please try again.')
             print('\rPlease check your data is in the right format')
-            print('\rFor example: Fruitloops, 5, 8.30, 01/01/2022 (MM-DD-YYYY)')
+            print('\rFor example: Fruitloops, 5, 8.30')
     else:
         print('\rProduct already exists in database')
     session.commit()
@@ -111,11 +112,10 @@ def show_menu():
                 get_item_by_id(input('\rPlease enter a valid ID of the item: '))
             elif user_input == 'A':
                 print('\nPlease enter the details of the new item:')
-                print('\rFor example: Fruitloops, 5, 8.30, 01/01/2022 (MM-DD-YYYY)')
+                print('\rFor example: Fruitloops, 5, 8.30')
                 add_item(input('\rName: '),
                     input('\rPrice: $'),
-                    input('\rQuantity: '),
-                    input('\rDate: '))
+                    input('\rQuantity: '))
             elif user_input == 'S':
                 get_all_items()
             elif user_input == 'B':
