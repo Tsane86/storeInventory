@@ -18,7 +18,7 @@ class Item(Base):  # Table name: item
     id = Column(Integer, primary_key=True)  # primary key is id
     name = Column(String)
     price = Column(Integer)  # must be int
-    date = Column(DateTime)  # default is current date
+    date = Column(DateTime)
     quantity= Column(Integer)
 
     def __repr__(self):  # return string representation of object
